@@ -70,13 +70,13 @@ def log_data(temperature, humidity):
             {
                 'MetricName': 'Temperature',
                 'Unit': 'Count',
-                'Value': temperature
-            },
-        ],
-        Dimensions=[
-            {
-                'Name': 'Sensor',
-                'Value': 'DMT11'
+                'Value': temperature,
+                'Dimensions': [
+                    {
+                        'Name': 'Sensor',
+                        'Value': 'DMT11'
+                    },
+                ],
             },
         ],
         Namespace='FridgeCrackers'
