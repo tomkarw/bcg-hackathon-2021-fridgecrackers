@@ -17,7 +17,7 @@ GPIO.cleanup()
 # read data using pin 14
 dht = dht11.DHT11(pin = 21)
 
-temp_list = [0 for _ in range(10)]
+temp_list = [0 for _ in range(3)]
 
 def run():
     while True:
@@ -37,7 +37,7 @@ def run():
             if all([temp > MAX_TEMP for temp in temp_list]):
                 alert(result)
 
-            time.sleep(3)
+            time.sleep(1)
         else:
             pass
             # print("Error: %d" % result.error_code)
