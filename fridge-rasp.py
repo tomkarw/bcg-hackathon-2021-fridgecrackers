@@ -49,7 +49,7 @@ def log_data(temperature, humidity):
     response = requests.get(url)
     if response is not None and response.status_code < 400:
         print('Request successful')
-        print(respons.body[:20])
+        print(response.body[:20])
     else:
         print('Request failed')
 
