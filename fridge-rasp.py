@@ -1,5 +1,6 @@
 import os
 import time
+import datetime
 import requests
 
 import RPi.GPIO as GPIO
@@ -28,10 +29,11 @@ def run():
         result = dht.read()
         
         if result.is_valid():
+            is_light = GPIO.input(LDR_LIGHT_PIN) == 0
+
+            print(f"{datetime.datetime.now():%Y-%m-%d %H:%M}")
             print("Temperature: %-3.1f C" % result.temperature)
             print("Humidity: %-3.1f %%" % result.humidity)
-
-            is_light = GPIO.input(LDR_LIGHT_PIN) == 0
             print(f"Light: {is_light}")
 
             log_data(
