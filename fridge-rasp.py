@@ -7,13 +7,16 @@ import dht11
 
 MAX_TEMP = 10
 
+DHT11_PIN = 21
+LDR_LIGHT_PIN = 16
+
 # initialize GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.cleanup()
 
 # read data using pin 14
-dht = dht11.DHT11(pin = 21)
+dht = dht11.DHT11(pin = DHT11_PIN)
 
 temp_list = [0 for _ in range(3)]
 
@@ -25,7 +28,14 @@ def run():
             print("Temperature: %-3.1f C" % result.temperature)
             print("Humidity: %-3.1f %%" % result.humidity)
 
-            log_data(result.temperature, result.humidity)
+            is_light = GPIO.input(LDR_LIGHT_PIN) == 0
+            print(f"Light: {is_light}")
+
+            log_data(
+                result.temperature,
+                result.humidity,
+                is_light
+            )
                
             temp_list.append(result.temperature)
             temp_list.pop(0)
@@ -37,9 +47,8 @@ def run():
                 alert(result)
 
             time.sleep(1)
-        else:
-            pass
-            # print("Error: %d" % result.error_code)
+
+
     
 def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
@@ -60,7 +69,7 @@ def call_twilio():
     )
 
 
-def log_data(temperature, humidity):
+def log_data(temperature, humidity, is_light):
     import boto3
     import requests
     
@@ -93,7 +102,7 @@ def log_data(temperature, humidity):
         Namespace='FridgeCrackers'
     )
     
-    print(response)
+    # print(response)
 
 if __name__ == "__main__":
     run()
