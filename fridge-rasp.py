@@ -14,7 +14,7 @@ LDR_LIGHT_PIN = 16
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(DIGITAL_PIN, GPIO.IN)
+GPIO.setup(LDR_LIGHT_PIN, GPIO.IN)
 
 GPIO.cleanup()
 
