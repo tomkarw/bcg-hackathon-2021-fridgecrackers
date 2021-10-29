@@ -1,8 +1,11 @@
+import os
 import time
 import requests
 
 import RPi.GPIO as GPIO
 import dht11
+
+from twilio.rest import Client as TwilioClient
 
 MAX_TEMP = 10
 
@@ -41,6 +44,19 @@ def run():
     
 def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
+    
+    # Find your Account SID and Auth Token at twilio.com/console
+    # and set the environment variables. See http://twil.io/secure
+    account_sid = os.environ['TWILIO_ACCOUNT_SID']
+    auth_token = os.environ['TWILIO_AUTH_TOKEN']
+    client = TwilioClient(account_sid, auth_token)
+    
+    call = client.calls.create(
+        url='http://demo.twilio.com/docs/voice.xml',
+        to=os.environ["TO_PHONE_NUM"],
+        from_=os.environ["FROM_PHONE_NUM"]
+    )
+
 
 def log_data(temperature, humidity):
     print('Make request')
