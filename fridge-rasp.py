@@ -20,7 +20,7 @@ dht = dht11.DHT11(pin = 21)
 temp_list = [0 for _ in range(3)]
 
 def run():
-    alert()
+    call_twilio()
     while True:
         result = dht.read()
         
@@ -46,6 +46,7 @@ def run():
 def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
     
+def call_twilio():
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure
     account_sid = os.environ['TWILIO_ACCOUNT_SID']
