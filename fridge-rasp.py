@@ -33,7 +33,8 @@ def run():
 
             time.sleep(3)
         else:
-            print("Error: %d" % result.error_code)
+            pass
+            # print("Error: %d" % result.error_code)
     
 def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
