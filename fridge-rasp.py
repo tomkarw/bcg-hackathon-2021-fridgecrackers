@@ -16,7 +16,7 @@ GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(LDR_LIGHT_PIN, GPIO.IN)
 
-GPIO.cleanup()
+# GPIO.cleanup()
 
 # read data using pin 14
 dht = dht11.DHT11(pin = DHT11_PIN)
