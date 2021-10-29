@@ -78,6 +78,17 @@ def log_data(temperature, humidity):
                     },
                 ],
             },
+            {
+                'MetricName': 'Humidity',
+                'Unit': 'Percent',
+                'Value': humidity,
+                'Dimensions': [
+                    {
+                        'Name': 'Sensor',
+                        'Value': 'DMT11'
+                    },
+                ],
+            },
         ],
         Namespace='FridgeCrackers'
     )
