@@ -13,6 +13,9 @@ LDR_LIGHT_PIN = 16
 # initialize GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(DIGITAL_PIN, GPIO.IN)
+
 GPIO.cleanup()
 
 # read data using pin 14
