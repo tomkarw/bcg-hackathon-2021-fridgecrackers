@@ -64,15 +64,12 @@ def log_data(temperature, humidity):
     import boto3
     import requests
     
-    r = requests.get('https://tutorials.releaseworksacademy.com/sitemap.xml')
-    number_of_tutorials = r.text.count('/learn/')
     CloudWatch = boto3.client('cloudwatch')
-    
     response = CloudWatch.put_metric_data(
         MetricData = [
             {
                 'MetricName': 'Test1',
-                'Unit': 'Celcius',
+                'Unit': 'Count',
                 'Value': temperature
             },
         ],

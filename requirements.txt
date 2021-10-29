@@ -2,3 +2,4 @@ dht11
 requests
 twilio
 boto3
+aws-shell
