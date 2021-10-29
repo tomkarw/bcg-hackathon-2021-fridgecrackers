@@ -20,7 +20,6 @@ dht = dht11.DHT11(pin = 21)
 temp_list = [0 for _ in range(3)]
 
 def run():
-    call_twilio()
     while True:
         result = dht.read()
         
@@ -36,6 +35,7 @@ def run():
     
             # if last 10 temp recording are above threshold, make an alert
             if all([temp > MAX_TEMP for temp in temp_list]):
+                # call_twilio()
                 alert(result)
 
             time.sleep(1)
