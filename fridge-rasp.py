@@ -22,14 +22,16 @@ def run():
         if result.is_valid():
             print("Temperature: %-3.1f C" % result.temperature)
             print("Humidity: %-3.1f %%" % result.humidity)
-    
-            if result.temperature > all([temp > MAX_TEMP for temp in temp_list]):
-                alert(result)
                
-            temp_list.append(result)
+            temp_list.append(result.temperature)
             temp_list.pop(0)
             print(temp_list)
-            time.sleep(60)
+    
+            # if last 10 temp recording are above threshold, make an alert
+            if all([temp > MAX_TEMP for temp in temp_list]):
+                alert(result)
+
+            time.sleep(3)
         else:
             print("Error: %d" % result.error_code)
     
