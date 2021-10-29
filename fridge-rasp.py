@@ -31,7 +31,7 @@ def run():
         if result.is_valid():
             is_light = GPIO.input(LDR_LIGHT_PIN) == 0
 
-            print(f"{datetime.datetime.now():%Y-%m-%d %H:%M}")
+            print(f"{datetime.datetime.now():%Y-%m-%d %H:%M:%s}")
             print("Temperature: %-3.1f C" % result.temperature)
             print("Humidity: %-3.1f %%" % result.humidity)
             print(f"Light: {is_light}")
