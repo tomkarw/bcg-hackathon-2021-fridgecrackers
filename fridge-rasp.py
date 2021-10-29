@@ -101,6 +101,17 @@ def log_data(temperature, humidity, is_light):
                     },
                 ],
             },
+            {
+                'MetricName': 'Light',
+                'Unit': 'Boolean',
+                'Value': is_light,
+                'Dimensions': [
+                    {
+                        'Name': 'Sensor',
+                        'Value': 'LDR'
+                    },
+                ],
+            },
         ],
         Namespace='FridgeCrackers'
     )
