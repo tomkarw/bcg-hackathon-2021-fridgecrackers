@@ -68,9 +68,15 @@ def log_data(temperature, humidity):
     response = CloudWatch.put_metric_data(
         MetricData = [
             {
-                'MetricName': 'Test1',
+                'MetricName': 'Temperature',
                 'Unit': 'Count',
                 'Value': temperature
+            },
+        ],
+        Dimensions=[
+            {
+                'Name': 'Sensor',
+                'Value': 'DMT11'
             },
         ],
         Namespace='FridgeCrackers'
