@@ -23,7 +23,7 @@ def run():
             print("Temperature: %-3.1f C" % result.temperature)
             print("Humidity: %-3.1f %%" % result.humidity)
     
-            if result.temperature > all(temp_list, lambda x: x > MAX_TEMP):
+            if result.temperature > all([temp > MAX_TEMP for temp in temp_list]):
                 alert(result)
                
             temp_list.append(result)
@@ -33,5 +33,8 @@ def run():
         else:
             print("Error: %d" % result.error_code)
     
+def alert(result):
+    print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
+
 if __name__ == "__main__":
     run()
