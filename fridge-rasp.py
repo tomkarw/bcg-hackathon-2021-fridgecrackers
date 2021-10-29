@@ -5,8 +5,6 @@ import requests
 import RPi.GPIO as GPIO
 import dht11
 
-from twilio.rest import Client as TwilioClient
-
 MAX_TEMP = 10
 
 # initialize GPIO
@@ -47,7 +45,7 @@ def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
     
 def call_twilio():
-    print(os.environ)
+    from twilio.rest import Client as TwilioClient
 
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure
@@ -63,15 +61,25 @@ def call_twilio():
 
 
 def log_data(temperature, humidity):
-    print('Make request')
-
-    url = "https://google.com"
-    response = requests.get(url)
-    if response is not None and response.status_code < 400:
-        print('Request successful')
-        print(response.text[:20])
-    else:
-        print('Request failed')
+    import boto3
+    import requests
+    
+    r = requests.get('https://tutorials.releaseworksacademy.com/sitemap.xml')
+    number_of_tutorials = r.text.count('/learn/')
+    CloudWatch = boto3.client('cloudwatch')
+    
+    response = CloudWatch.put_metric_data(
+        MetricData = [
+            {
+                'MetricName': 'Test1',
+                'Unit': 'Celcius',
+                'Value': temperature
+            },
+        ],
+        Namespace='FridgeCrackers'
+    )
+    
+    print(response)
 
 if __name__ == "__main__":
     run()
