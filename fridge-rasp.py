@@ -1,4 +1,5 @@
 import time
+import requests
 
 import RPi.GPIO as GPIO
 import dht11
@@ -22,6 +23,8 @@ def run():
         if result.is_valid():
             print("Temperature: %-3.1f C" % result.temperature)
             print("Humidity: %-3.1f %%" % result.humidity)
+
+            log_data(result.temperature, result.humidity)
                
             temp_list.append(result.temperature)
             temp_list.pop(0)
@@ -38,6 +41,17 @@ def run():
     
 def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
+
+def log_data(temperature, humidity):
+    print('Make request')
+
+    url = "https://google.com"
+    response = requests.get(url)
+    if response is not None and response.status_code < 400:
+        print('Request successful')
+        print(respons.body[:20])
+    else:
+        print('Request failed')
 
 if __name__ == "__main__":
     run()
