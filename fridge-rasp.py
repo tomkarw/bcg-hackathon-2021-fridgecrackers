@@ -103,7 +103,7 @@ def log_data(temperature, humidity, is_light):
             },
             {
                 'MetricName': 'Light',
-                'Unit': 'Boolean',
+                'Unit': 'Bits',
                 'Value': is_light,
                 'Dimensions': [
                     {
