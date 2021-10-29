@@ -51,8 +51,7 @@ def run():
 
             time.sleep(1)
 
-
-    
+ 
 def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
     
@@ -104,7 +103,7 @@ def log_data(temperature, humidity, is_light):
             {
                 'MetricName': 'Light',
                 'Unit': 'Bits',
-                'Value': is_light,
+                'Value': int(is_light),
                 'Dimensions': [
                     {
                         'Name': 'Sensor',
