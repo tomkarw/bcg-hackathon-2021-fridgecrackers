@@ -125,6 +125,7 @@ def upload_missing_data(log_file):
     with open(log_file, "r") as file_handle:
         for log_string in file_handle.read().split("\n"):
             log = json.loads(log_string)
+            print("log:", log)
             timestamp = log["timestamp"]
             temprature = log["temprature"]
             humidity = log["humidity"]
