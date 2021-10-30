@@ -95,7 +95,8 @@ def log_data(temperature, humidity, is_light, timestamp):
 
         # new log worked, check if some data is stored locally and upload it as well
         upload_missing_data(LOG_FILE)
-    except:
+    except Exception as e:
+        print(f"there was an issue connecting to the internet: {e}")
         import json
 
         # there was an issue with connecting to the internet
