@@ -124,6 +124,12 @@ def upload_missing_data(log_file):
                     MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
                     Namespace='FridgeCrackers'
                 )
+            except:
+                print("Error uploading historical data!")
+
+        # all offline data pushed to cloud, can clear the file
+        file_handle.truncate()
+    
 
 def generate_metric_data(temperature, humidity, is_light, timestamp):
     return [{
