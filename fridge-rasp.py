@@ -88,54 +88,7 @@ def log_data(temperature, humidity, is_light, timestamp):
     CloudWatch = boto3.client('cloudwatch')
     try:
         response = CloudWatch.put_metric_data(
-            MetricData = [
-                {
-                    'MetricName': 'Temperature',
-                    "Timestamp": timestamp,
-                    'Unit': 'Count',
-                    'Value': temperature,
-                    'Dimensions': [
-                        {
-                            'Name': 'Name',
-                            'Value': FRIDGE_NAME
-                        },
-                        {
-                            'Name': 'Sensor',
-                            'Value': 'DMT11'
-                        },
-                    ],
-                },
-                {
-                    'MetricName': 'Humidity',
-                    'Unit': 'Percent',
-                    'Value': humidity,
-                    'Dimensions': [
-                        {
-                            'Name': 'Name',
-                            'Value': FRIDGE_NAME
-                        },
-                        {
-                            'Name': 'Sensor',
-                            'Value': 'DMT11'
-                        },
-                    ],
-                },
-                {
-                    'MetricName': 'Light',
-                    'Unit': 'Bits',
-                    'Value': int(is_light),
-                    'Dimensions': [
-                        {
-                            'Name': 'Name',
-                            'Value': FRIDGE_NAME
-                        },
-                        {
-                            'Name': 'Sensor',
-                            'Value': 'LDR'
-                        },
-                    ],
-                },
-            ],
+            MetricData = generate_metric_data(temperature, humidity, is_light, timestamp)
             Namespace='FridgeCrackers'
         )
 
@@ -168,57 +121,57 @@ def upload_missing_data(log_file):
             is_light = log["is_light"]
             try:
                 response = CloudWatch.put_metric_data(
-                    MetricData = [
-                        {
-                            'MetricName': 'Temperature',
-                            "Timestamp": timestamp,
-                            'Unit': 'Count',
-                            'Value': temperature,
-                            'Dimensions': [
-                                {
-                                    'Name': 'Name',
-                                    'Value': FRIDGE_NAME
-                                },
-                                {
-                                    'Name': 'Sensor',
-                                    'Value': 'DMT11'
-                                },
-                            ],
-                        },
-                        {
-                            'MetricName': 'Humidity',
-                            'Unit': 'Percent',
-                            'Value': humidity,
-                            'Dimensions': [
-                                {
-                                    'Name': 'Name',
-                                    'Value': FRIDGE_NAME
-                                },
-                                {
-                                    'Name': 'Sensor',
-                                    'Value': 'DMT11'
-                                },
-                            ],
-                        },
-                        {
-                            'MetricName': 'Light',
-                            'Unit': 'Bits',
-                            'Value': int(is_light),
-                            'Dimensions': [
-                                {
-                                    'Name': 'Name',
-                                    'Value': FRIDGE_NAME
-                                },
-                                {
-                                    'Name': 'Sensor',
-                                    'Value': 'LDR'
-                                },
-                            ],
-                        },
-                    ],
+                    MetricData = generate_metric_data(temperature, humidity, is_light, timestamp)
                     Namespace='FridgeCrackers'
                 )
 
+def generate_metric_data(temperature, humidity, is_light, timestamp):
+    return [{
+        'MetricName': 'Temperature',
+        "Timestamp": timestamp,
+        'Unit': 'Count',
+        'Value': temperature,
+        'Dimensions': [
+            {
+                'Name': 'FridgeName',
+                'Value': FRIDGE_NAME
+            },
+            {
+                'Name': 'Sensor',
+                'Value': 'DMT11'
+            },
+        ],
+    },
+    {
+        'MetricName': 'Humidity',
+        'Unit': 'Percent',
+        'Value': humidity,
+        'Dimensions': [
+            {
+                'Name': 'FridgeName',
+                'Value': FRIDGE_NAME
+            },
+            {
+                'Name': 'Sensor',
+                'Value': 'DMT11'
+            },
+        ],
+    },
+    {
+        'MetricName': 'Light',
+        'Unit': 'Bits',
+        'Value': int(is_light),
+        'Dimensions': [
+            {
+                'Name': 'FridgeName',
+                'Value': FRIDGE_NAME
+            },
+            {
+                'Name': 'Sensor',
+                'Value': 'LDR'
+            },
+        ],
+    }]
 
 if __name__ == "__main__":
     run()
