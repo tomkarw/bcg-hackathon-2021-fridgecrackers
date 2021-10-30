@@ -89,8 +89,6 @@ def log_data(temperature, humidity, is_light, timestamp):
      
     CloudWatch = boto3.client('cloudwatch')
     try:
-        print("TEMPORARY RAISE STATEMENT")
-        raise "TEMPORARY RAISE STATEMENT"
         response = CloudWatch.put_metric_data(
             MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
             Namespace='FridgeCrackers'
@@ -99,8 +97,8 @@ def log_data(temperature, humidity, is_light, timestamp):
 
         # new log worked, check if some data is stored locally and upload it as well
         upload_missing_data(LOG_FILE)
-    except Exception as e:
-        print(f"there was an issue connecting to the internet: {e}")
+    except:
+        print(f"There was an issue connecting to the internet.")
         import json
 
         # there was an issue with connecting to the internet
