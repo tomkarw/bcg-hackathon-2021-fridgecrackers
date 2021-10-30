@@ -147,7 +147,7 @@ def log_data(temperature, humidity, is_light, timestamp):
                 "humidity": humidity,
                 "is_light": is_light,
                 "timestamp": timestamp,
-            }))
+            }), file_handle)
 
 
 if __name__ == "__main__":
