@@ -143,6 +143,7 @@ def upload_missing_data(log_file):
             except:
                 print("Error uploading historical data!")
 
+    with open(log_file, "w") as file_handle:
         # all offline data pushed to cloud, can clear the file
         file_handle.truncate()
     
