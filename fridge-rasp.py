@@ -142,12 +142,12 @@ def log_data(temperature, humidity, is_light, timestamp):
         # there was an issue with connecting to the internet
         # save the data locally
         with open("./data.log", "a") as file_handle:
-            file_handle.write(json.dump({
+            json.dump({
                 "temeperature": temperature,
                 "humidity": humidity,
                 "is_light": is_light,
                 "timestamp": timestamp,
-            }), file_handle)
+            }, file_handle)
 
 
 if __name__ == "__main__":
