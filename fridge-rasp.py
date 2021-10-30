@@ -127,7 +127,7 @@ def upload_missing_data(log_file):
             try:
                 log = json.loads(log_string)
             except:
-                print("malformed json log:", log)
+                print("malformed json log:", log_string)
                 continue
             print("log:", log)
             timestamp = log["timestamp"]
