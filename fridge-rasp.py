@@ -84,6 +84,8 @@ def log_data(temperature, humidity, is_light, timestamp):
      
     CloudWatch = boto3.client('cloudwatch')
     try:
+        # TODO: TEMPORARY
+        raise "Temporary offline stump"
         response = CloudWatch.put_metric_data(
             MetricData = [
                 {
@@ -148,6 +150,7 @@ def log_data(temperature, humidity, is_light, timestamp):
                 "is_light": is_light,
                 "timestamp": timestamp,
             }, file_handle)
+            file_handle.write("\n")
 
 
 if __name__ == "__main__":
