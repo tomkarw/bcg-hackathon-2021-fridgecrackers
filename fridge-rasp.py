@@ -115,6 +115,8 @@ def log_data(temperature, humidity, is_light, timestamp):
 def upload_missing_data(log_file):
     import boto3
     import requests
+
+    print("uploading data logged while network was down to the cloud")
      
     CloudWatch = boto3.client('cloudwatch')
     with open(log_file, "r") as file_handle:
@@ -135,6 +137,7 @@ def upload_missing_data(log_file):
         # all offline data pushed to cloud, can clear the file
         file_handle.truncate()
     
+    print("finished uploading data logged while network was down to the cloud")
 
 def generate_metric_data(temperature, humidity, is_light, timestamp):
     return [{
