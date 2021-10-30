@@ -124,7 +124,11 @@ def upload_missing_data(log_file):
     CloudWatch = boto3.client('cloudwatch')
     with open(log_file, "r") as file_handle:
         for log_string in file_handle.read().split("\n"):
-            log = json.loads(log_string)
+            try:
+                log = json.loads(log_string)
+            except:
+                print("malformed json log:", log)
+                continue
             print("log:", log)
             timestamp = log["timestamp"]
             temperature = log["temperature"]
