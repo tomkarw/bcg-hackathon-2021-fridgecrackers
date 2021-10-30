@@ -125,7 +125,8 @@ def upload_missing_data(log_file):
      
     CloudWatch = boto3.client('cloudwatch')
     with open(log_file, "r") as file_handle:
-        for log in file_handle.read().split("\n"):
+        for log_string in file_handle.read().split("\n"):
+            log = json.loads(log_string)
             timestamp = log["timestamp"]
             temeprature = log["temeprature"]
             humidity = log["humidity"]
