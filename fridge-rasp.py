@@ -11,6 +11,9 @@ MAX_TEMP = 10
 DHT11_PIN = 21
 LDR_LIGHT_PIN = 16
 
+FRIDGE_NAME = os.environ["FRIDGE_NAME"]
+LOG_FILE = "./data.log"
+
 # initialize GPIO
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -84,8 +87,6 @@ def log_data(temperature, humidity, is_light, timestamp):
      
     CloudWatch = boto3.client('cloudwatch')
     try:
-        # TODO: TEMPORARY
-        raise "Temporary offline stump"
         response = CloudWatch.put_metric_data(
             MetricData = [
                 {
@@ -96,7 +97,7 @@ def log_data(temperature, humidity, is_light, timestamp):
                     'Dimensions': [
                         {
                             'Name': 'Name',
-                            'Value': 'Fridge 1'
+                            'Value': FRIDGE_NAME
                         },
                         {
                             'Name': 'Sensor',
@@ -111,7 +112,7 @@ def log_data(temperature, humidity, is_light, timestamp):
                     'Dimensions': [
                         {
                             'Name': 'Name',
-                            'Value': 'Fridge 1'
+                            'Value': FRIDGE_NAME
                         },
                         {
                             'Name': 'Sensor',
@@ -126,7 +127,7 @@ def log_data(temperature, humidity, is_light, timestamp):
                     'Dimensions': [
                         {
                             'Name': 'Name',
-                            'Value': 'Fridge 1'
+                            'Value': FRIDGE_NAME
                         },
                         {
                             'Name': 'Sensor',
@@ -137,13 +138,15 @@ def log_data(temperature, humidity, is_light, timestamp):
             ],
             Namespace='FridgeCrackers'
         )
-        print(response)
+
+        # new log worked, check if some data is stored locally and upload it as well
+        upload_missing_data(LOG_FILE)
     except:
         import json
 
         # there was an issue with connecting to the internet
         # save the data locally
-        with open("./data.log", "a") as file_handle:
+        with open(LOG_FILE, "a") as file_handle:
             json.dump({
                 "temeperature": temperature,
                 "humidity": humidity,
@@ -151,6 +154,70 @@ def log_data(temperature, humidity, is_light, timestamp):
                 "timestamp": timestamp,
             }, file_handle)
             file_handle.write("\n")
+
+def upload_missing_data(log_file):
+    import boto3
+    import requests
+     
+    CloudWatch = boto3.client('cloudwatch')
+    with open(log_file, "r") as file_handle:
+        for log in file_handle.read().split("\n"):
+            timestamp = log["timestamp"]
+            temeprature = log["temeprature"]
+            humidity = log["humidity"]
+            is_light = log["is_light"]
+            try:
+                response = CloudWatch.put_metric_data(
+                    MetricData = [
+                        {
+                            'MetricName': 'Temperature',
+                            "Timestamp": timestamp,
+                            'Unit': 'Count',
+                            'Value': temperature,
+                            'Dimensions': [
+                                {
+                                    'Name': 'Name',
+                                    'Value': FRIDGE_NAME
+                                },
+                                {
+                                    'Name': 'Sensor',
+                                    'Value': 'DMT11'
+                                },
+                            ],
+                        },
+                        {
+                            'MetricName': 'Humidity',
+                            'Unit': 'Percent',
+                            'Value': humidity,
+                            'Dimensions': [
+                                {
+                                    'Name': 'Name',
+                                    'Value': FRIDGE_NAME
+                                },
+                                {
+                                    'Name': 'Sensor',
+                                    'Value': 'DMT11'
+                                },
+                            ],
+                        },
+                        {
+                            'MetricName': 'Light',
+                            'Unit': 'Bits',
+                            'Value': int(is_light),
+                            'Dimensions': [
+                                {
+                                    'Name': 'Name',
+                                    'Value': FRIDGE_NAME
+                                },
+                                {
+                                    'Name': 'Sensor',
+                                    'Value': 'LDR'
+                                },
+                            ],
+                        },
+                    ],
+                    Namespace='FridgeCrackers'
+                )
 
 
 if __name__ == "__main__":
