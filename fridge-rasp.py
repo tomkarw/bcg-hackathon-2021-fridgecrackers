@@ -2,9 +2,14 @@ import os
 import time
 import datetime
 import requests
+import boto3
+import requests
+import json
 
 import RPi.GPIO as GPIO
 import dht11
+
+from twilio.rest import Client as TwilioClient
 
 MAX_TEMP = 10
 
@@ -68,7 +73,6 @@ def alert(result):
     print(f"ALERT!: temprerature {result.temperature} is above the threshold of {MAX_TEMP}")
     
 def call_twilio():
-    from twilio.rest import Client as TwilioClient
 
     # Find your Account SID and Auth Token at twilio.com/console
     # and set the environment variables. See http://twil.io/secure
@@ -84,9 +88,6 @@ def call_twilio():
 
 
 def log_data(temperature, humidity, is_light, timestamp):
-    import boto3
-    import requests
-
     is_online = True
      
     CloudWatch = boto3.client('cloudwatch')
@@ -101,7 +102,6 @@ def log_data(temperature, humidity, is_light, timestamp):
     except:
         is_online = False
         print(f"There was an issue connecting to the internet.")
-        import json
 
         # there was an issue with connecting to the internet
         # save the data locally
@@ -118,8 +118,6 @@ def log_data(temperature, humidity, is_light, timestamp):
         upload_missing_data(LOG_FILE)
 
 def upload_missing_data(log_file):
-    import boto3
-    import requests
 
     print("uploading data logged while network was down to the cloud")
      
