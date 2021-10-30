@@ -25,7 +25,7 @@ GPIO.setup(LDR_LIGHT_PIN, GPIO.IN)
 # read data using pin 14
 dht = dht11.DHT11(pin = DHT11_PIN)
 
-temp_list = [0 for _ in range(3)]
+temp_list = [0 for _ in range(10)]
 
 def run():
     while True:
@@ -36,6 +36,7 @@ def run():
         if result.is_valid():
             date = datetime.datetime.now()
 
+            # is the fridge open and light gets in
             is_light = GPIO.input(LDR_LIGHT_PIN) == 0
 
             print(f"{date:%Y-%m-%d %H:%M:%s}")
@@ -43,6 +44,7 @@ def run():
             print("Humidity: %-3.1f %%" % result.humidity)
             print(f"Light: {is_light}")
 
+            # log data (to the cloud if connected, to file otherwise)
             log_data(
                 result.temperature,
                 result.humidity,
@@ -87,6 +89,8 @@ def log_data(temperature, humidity, is_light, timestamp):
      
     CloudWatch = boto3.client('cloudwatch')
     try:
+        print("TEMPORARY RAISE STATEMENT")
+        raise "TEMPORARY RAISE STATEMENT"
         response = CloudWatch.put_metric_data(
             MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
             Namespace='FridgeCrackers'
