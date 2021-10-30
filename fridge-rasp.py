@@ -137,6 +137,8 @@ def log_data(temperature, humidity, is_light, timestamp):
         )
         print(response)
     except:
+        import json
+
         # there was an issue with connecting to the internet
         # save the data locally
         with open("./data.log", "a") as file_handle:
