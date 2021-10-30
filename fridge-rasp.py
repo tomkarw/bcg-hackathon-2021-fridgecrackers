@@ -136,16 +136,16 @@ def log_data(temperature, humidity, is_light, timestamp):
             Namespace='FridgeCrackers'
         )
         print(response)
-    # except:
-    #     # there was an issue with connecting to the internet
-    #     # save the data locally
-    #     with open("./data.log", "a") as file_handle:
-    #         file_handle.write(json.dump({
-    #             "temeperature": temperature,
-    #             "humidity": humidity,
-    #             "is_light": is_light,
-    #             "timestamp": timestamp,
-    #         })
+    except:
+        # there was an issue with connecting to the internet
+        # save the data locally
+        with open("./data.log", "a") as file_handle:
+            file_handle.write(json.dump({
+                "temeperature": temperature,
+                "humidity": humidity,
+                "is_light": is_light,
+                "timestamp": timestamp,
+            }))
 
 
 if __name__ == "__main__":
