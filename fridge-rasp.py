@@ -127,7 +127,7 @@ def upload_missing_data(log_file):
             log = json.loads(log_string)
             print("log:", log)
             timestamp = log["timestamp"]
-            temprature = log["temprature"]
+            temperature = log["temperature"]
             humidity = log["humidity"]
             is_light = log["is_light"]
             try:
