@@ -88,13 +88,15 @@ def log_data(temperature, humidity, is_light, timestamp):
     CloudWatch = boto3.client('cloudwatch')
     try:
         response = CloudWatch.put_metric_data(
-            MetricData = generate_metric_data(temperature, humidity, is_light, timestamp)
+            MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
             Namespace='FridgeCrackers'
         )
+        print(response)
 
         # new log worked, check if some data is stored locally and upload it as well
         upload_missing_data(LOG_FILE)
-    except:
+    except Exception as e:
+        print(f"there was an issue connecting to the internet: {e}")
         import json
 
         # there was an issue with connecting to the internet
@@ -121,9 +123,16 @@ def upload_missing_data(log_file):
             is_light = log["is_light"]
             try:
                 response = CloudWatch.put_metric_data(
-                    MetricData = generate_metric_data(temperature, humidity, is_light, timestamp)
+                    MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
                     Namespace='FridgeCrackers'
                 )
+                print("loged historical data", response)
+            except:
+                print("Error uploading historical data!")
+
+        # all offline data pushed to cloud, can clear the file
+        file_handle.truncate()
+    
 
 def generate_metric_data(temperature, humidity, is_light, timestamp):
     return [{
