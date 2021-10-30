@@ -83,58 +83,70 @@ def log_data(temperature, humidity, is_light, timestamp):
     import requests
      
     CloudWatch = boto3.client('cloudwatch')
-    response = CloudWatch.put_metric_data(
-        MetricData = [
-            {
-                'MetricName': 'Temperature',
-                "Timestamp": timestamp,
-                'Unit': 'Count',
-                'Value': temperature,
-                'Dimensions': [
-                    {
-                        'Name': 'Name',
-                        'Value': 'Fridge 1'
-                    },
-                    {
-                        'Name': 'Sensor',
-                        'Value': 'DMT11'
-                    },
-                ],
-            },
-            {
-                'MetricName': 'Humidity',
-                'Unit': 'Percent',
-                'Value': humidity,
-                'Dimensions': [
-                    {
-                        'Name': 'Name',
-                        'Value': 'Fridge 1'
-                    },
-                    {
-                        'Name': 'Sensor',
-                        'Value': 'DMT11'
-                    },
-                ],
-            },
-            {
-                'MetricName': 'Light',
-                'Unit': 'Bits',
-                'Value': int(is_light),
-                'Dimensions': [
-                    {
-                        'Name': 'Name',
-                        'Value': 'Fridge 1'
-                    },
-                    {
-                        'Name': 'Sensor',
-                        'Value': 'LDR'
-                    },
-                ],
-            },
-        ],
-        Namespace='FridgeCrackers'
-    )
-    print(response)
+    try:
+        response = CloudWatch.put_metric_data(
+            MetricData = [
+                {
+                    'MetricName': 'Temperature',
+                    "Timestamp": timestamp,
+                    'Unit': 'Count',
+                    'Value': temperature,
+                    'Dimensions': [
+                        {
+                            'Name': 'Name',
+                            'Value': 'Fridge 1'
+                        },
+                        {
+                            'Name': 'Sensor',
+                            'Value': 'DMT11'
+                        },
+                    ],
+                },
+                {
+                    'MetricName': 'Humidity',
+                    'Unit': 'Percent',
+                    'Value': humidity,
+                    'Dimensions': [
+                        {
+                            'Name': 'Name',
+                            'Value': 'Fridge 1'
+                        },
+                        {
+                            'Name': 'Sensor',
+                            'Value': 'DMT11'
+                        },
+                    ],
+                },
+                {
+                    'MetricName': 'Light',
+                    'Unit': 'Bits',
+                    'Value': int(is_light),
+                    'Dimensions': [
+                        {
+                            'Name': 'Name',
+                            'Value': 'Fridge 1'
+                        },
+                        {
+                            'Name': 'Sensor',
+                            'Value': 'LDR'
+                        },
+                    ],
+                },
+            ],
+            Namespace='FridgeCrackers'
+        )
+        print(response)
+    except:
+        # there was an issue with connecting to the internet
+        # save the data locally
+        with open("./data.log", "a") as file_handle:
+            file_handle.write(json.dump({
+                "temeperature": temperature,
+                "humidity": humidity,
+                "is_light": is_light,
+                "timestamp": timestamp,
+            })
+
 
 if __name__ == "__main__":
     run()
