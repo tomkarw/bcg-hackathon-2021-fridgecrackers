@@ -88,7 +88,7 @@ def log_data(temperature, humidity, is_light, timestamp):
     CloudWatch = boto3.client('cloudwatch')
     try:
         response = CloudWatch.put_metric_data(
-            MetricData = generate_metric_data(temperature, humidity, is_light, timestamp)
+            MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
             Namespace='FridgeCrackers'
         )
 
@@ -121,7 +121,7 @@ def upload_missing_data(log_file):
             is_light = log["is_light"]
             try:
                 response = CloudWatch.put_metric_data(
-                    MetricData = generate_metric_data(temperature, humidity, is_light, timestamp)
+                    MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
                     Namespace='FridgeCrackers'
                 )
 
