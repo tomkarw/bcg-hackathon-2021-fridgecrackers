@@ -107,7 +107,7 @@ def log_data(temperature, humidity, is_light, timestamp):
         # save the data locally
         with open(LOG_FILE, "a") as file_handle:
             json.dump({
-                "temeperature": temperature,
+                "temperature": temperature,
                 "humidity": humidity,
                 "is_light": is_light,
                 "timestamp": timestamp,
@@ -126,7 +126,7 @@ def upload_missing_data(log_file):
         for log_string in file_handle.read().split("\n"):
             log = json.loads(log_string)
             timestamp = log["timestamp"]
-            temeprature = log["temeprature"]
+            temprature = log["temprature"]
             humidity = log["humidity"]
             is_light = log["is_light"]
             try:
