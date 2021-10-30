@@ -86,6 +86,8 @@ def call_twilio():
 def log_data(temperature, humidity, is_light, timestamp):
     import boto3
     import requests
+
+    is_online = True
      
     CloudWatch = boto3.client('cloudwatch')
     try:
@@ -96,8 +98,8 @@ def log_data(temperature, humidity, is_light, timestamp):
         print(response)
 
         # new log worked, check if some data is stored locally and upload it as well
-        upload_missing_data(LOG_FILE)
     except:
+        is_online = False
         print(f"There was an issue connecting to the internet.")
         import json
 
@@ -111,6 +113,9 @@ def log_data(temperature, humidity, is_light, timestamp):
                 "timestamp": timestamp,
             }, file_handle)
             file_handle.write("\n")
+
+    if is_online:
+        upload_missing_data(LOG_FILE)
 
 def upload_missing_data(log_file):
     import boto3
