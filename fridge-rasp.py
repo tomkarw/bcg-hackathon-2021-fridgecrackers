@@ -28,6 +28,8 @@ def run():
     while True:
         result = dht.read()
         
+        # dht11 need time to reset before next read
+        # only then will the read data be valid
         if result.is_valid():
             is_light = GPIO.input(LDR_LIGHT_PIN) == 0
 
@@ -41,7 +43,7 @@ def run():
                 result.humidity,
                 is_light
             )
-               
+             
             temp_list.append(result.temperature)
             temp_list.pop(0)
             print(temp_list)
@@ -73,7 +75,7 @@ def call_twilio():
     )
 
 
-def log_data(temperature, humidity, is_light):
+def log_data(temperature, humidity, is_light, timestamp):
     import boto3
     import requests
     
@@ -82,9 +84,14 @@ def log_data(temperature, humidity, is_light):
         MetricData = [
             {
                 'MetricName': 'Temperature',
+                "Timestamp": timestamp,
                 'Unit': 'Count',
                 'Value': temperature,
                 'Dimensions': [
+                    {
+                        'Name': 'Name',
+                        'Value': 'Fridge 1'
+                    },
                     {
                         'Name': 'Sensor',
                         'Value': 'DMT11'
@@ -97,6 +104,10 @@ def log_data(temperature, humidity, is_light):
                 'Value': humidity,
                 'Dimensions': [
                     {
+                        'Name': 'Name',
+                        'Value': 'Fridge 1'
+                    },
+                    {
                         'Name': 'Sensor',
                         'Value': 'DMT11'
                     },
@@ -108,6 +119,10 @@ def log_data(temperature, humidity, is_light):
                 'Value': int(is_light),
                 'Dimensions': [
                     {
+                        'Name': 'Name',
+                        'Value': 'Fridge 1'
+                    },
+                    {
                         'Name': 'Sensor',
                         'Value': 'LDR'
                     },
@@ -116,8 +131,7 @@ def log_data(temperature, humidity, is_light):
         ],
         Namespace='FridgeCrackers'
     )
-    
-    # print(response)
+    print(response)
 
 if __name__ == "__main__":
     run()
