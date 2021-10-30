@@ -91,6 +91,7 @@ def log_data(temperature, humidity, is_light, timestamp):
             MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
             Namespace='FridgeCrackers'
         )
+        print(response)
 
         # new log worked, check if some data is stored locally and upload it as well
         upload_missing_data(LOG_FILE)
@@ -124,6 +125,7 @@ def upload_missing_data(log_file):
                     MetricData = generate_metric_data(temperature, humidity, is_light, timestamp),
                     Namespace='FridgeCrackers'
                 )
+                print("loged historical data", response)
             except:
                 print("Error uploading historical data!")
 
